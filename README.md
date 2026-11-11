@@ -16,6 +16,20 @@
 
 **Author:** Hengne Li (李衡讷) — South China Normal University (SCNU) / LHCb Collaboration, CERN (`Hengne.Li@cern.ch`, `Hengne.Li@m.scnu.edu.cn`)
 
+> [!IMPORTANT]
+> ### 🌟 Core Deliverable — Interactive Web Portal & 3D Photon Workbench (**Must-See!**)
+> **Static README screenshots only show a fraction of this study — everyone is strongly encouraged to open the live interactive web portal below to explore the core results firsthand!**
+>
+> * 🚀 **[Open English Interactive Results Portal (Live Web — Must-See!)](https://hengne.github.io/picocal-lightguide-reconstruction/index-en.html)** &nbsp;|&nbsp; 🇨🇳 **[打开中文版交互式核心成果门户（强烈推荐必看！）](https://hengne.github.io/picocal-lightguide-reconstruction/)**
+> * ✨ **[Launch Fullscreen 3D Photon→PMT Workbench (EN)](https://hengne.github.io/picocal-lightguide-reconstruction/presentation/interactive-3d-photon-simulator-en.html)** &nbsp;|&nbsp; **[全屏三维光子传播与 PMT 实验台（中文）](https://hengne.github.io/picocal-lightguide-reconstruction/presentation/interactive-3d-photon-simulator.html)**
+> * 🔍 **[Open 24× Infinite-Zoom Vector Report SVG (EN)](https://hengne.github.io/picocal-lightguide-reconstruction/light-guide-imperfection-simulation-en.svg)** &nbsp;|&nbsp; **[打开 24× 无级缩放主报告 SVG（中文）](https://hengne.github.io/picocal-lightguide-reconstruction/light-guide-imperfection-simulation.svg)**
+>
+> **What you can do inside the interactive webpage:**
+> 1. **Synchronized 100×100 Scan Explorer**: Hover anywhere on the entrance window to compare measured PMT mV, Metal-GPU simulated mV, non-axisymmetric `%` ripples, and transverse slices with **live Geant4 11.1.3 optical-photon validation points**;
+> 2. **Micron-Scale Surface Probe**: Inspect the unwrapped inner mirror deformation map `ΔR(θ, z)` (`-268 μm` inward bulges to `+272 μm` outward dents) with sub-millimeter cursor telemetry;
+> 3. **Real-Time 3D Photon & PMT Oscilloscope**: Orbit `360°` around the reconstructed 3D cone, click any `(X, Y)` laser spot, toggle Ideal vs. Deformed walls, and watch multi-bounce photon wavepackets & PMT anode pulses live.
+> *(Offline / CERN GitLab users can also open local [`index-en.html`](./index-en.html) / [`index.html`](./index.html) or share the zero-dependency single-file bundle [`lhcb-picocal-light-guide-report-standalone-en.html`](./lhcb-picocal-light-guide-report-standalone-en.html) / [`-zh.html`](./lhcb-picocal-light-guide-report-standalone-zh.html).)*
+
 ---
 
 ![LHCb PicoCal Light Guide Research Summary Poster](./docs/figures/research-summary-poster.png)
@@ -49,8 +63,16 @@ This repository provides a complete, cross-platform, memory-guarded **3D freefor
 | **Inverse Fit** | **Full-Aperture Pearson `r`** | **`0.9931`** | Across the entire `r < 8.40 mm` entrance aperture |
 | **Inverse Fit** | **Non-Axisymmetric Bump `r`** | **`0.8797`** (`0.8036` raw unsmoothed) | Captures central-upper-left dip & right crescent band |
 | **Inverse Fit** | **Surface Deformation Range** | **`-268 μm` (inward bulge) to `+272 μm` (outward dent)** | Realistic machining + hand-laminated reflective film tolerance |
-| **Validation** | **Geant4 11.1 Slice Check** | **`25.21 mV` mean net signal** (`15` pts × `8,000` photons) | At `Y' = +1.6 mm` across the primary central-left dip |
+| **Validation** | **Geant4 11.1.3 Cross-Validation** | **`25.21 mV` mean (`97.6%` vs Sim / `98.0%` vs Exp)** | Zero re-tuned parameters (`15` pts × `8,000` `G4OpticalPhoton`, `χ²/ndf = 1.82–1.89`) |
 | **System Safety** | **Peak Physical RAM (`RSS`)** | **`< 390 MB`** (`335 MB` solver / `386 MB` full pipeline) | Enforced dynamically by [`memory-guard.py`](./memory-guard.py) |
+
+### 2.1 Independent Geant4 11.1.3 Cross-Validation Conclusion (`Y' = +1.60 mm` Slice)
+
+Passing the reconstructed B-spline surface mesh (`56,576` watertight facets in `G4TessellatedSolid`), calibrated mirror reflectivity, cosine emission exponent, and PMT gain scale directly into **Geant4 11.1.3 (`G4OpticalPhysics`)** with **zero parameter re-tuning** yields high consistency across all `15` slice points (`120,000` optical photons, `~11.2 s` across `5` parallel workers):
+
+* **Absolute Light-Yield Scale**: Experimental scan mean = **`25.72 mV`**, custom Metal/C++ smooth B-spline raytracer = **`25.84 mV`**, Geant4 11.1.3 = **`25.21 ± 0.68 mV/pt`** — corresponding to **`97.6%` agreement (`-0.63 mV` / `-2.43%`, `RMSE = 0.94 mV`)** with the custom raytracer and **`98.0%` agreement (`-0.51 mV` / `-1.97%`, `RMSE = 0.92 mV`)** with experiment.
+* **Spatial Waveform & Pull Distribution**: Pure-statistical reduced chi-square is **`χ²/ndf = 1.89`** (vs. Metal/C++) and **`1.82`** (vs. experiment), with `11/15` points within `1.7σ` (max pull `2.54σ`), cleanly reproducing the *"double-peak flanking a central-left dip"* profile.
+* **Physical Origin of the `-2.4%` (`-0.63 mV`) Offset**: Fully explained by (1) the **`50 μm` volume-overlap safety air gap** in [`geant4-light-guide.cc`](./geant4-validator/geant4-light-guide.cc) (`PmtWindowPV` front face at `z = 100.05 mm` vs. exact `z = 100.00 mm` exit scoring in [`ray-tracer.py`](./ray-tracer.py), letting grazing high-angle exit rays slip outside `R = 8.18 mm`, `~ -1.5% to -2.0%`), (2) **`60 × 61` planar facet discretization** (`6°` steps) vs. analytic `C^2` B-spline normals over `4–8` bounces (`±1%` local caustic jitter), and (3) ideal point-source emission in Geant4 vs. `σ_beam = 0.219 mm` laser-spot convolution.
 
 ![Photon Propagation & Critical-Angle Turnaround Escape Mechanism](./docs/figures/photon-propagation-mechanism.png)
 

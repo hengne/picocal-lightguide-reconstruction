@@ -16,6 +16,20 @@
 
 **作者：** 李衡讷 (Hengne Li) — 华南师范大学 (SCNU) / 欧洲核子研究中心 LHCb 合作组 (`Hengne.Li@cern.ch`, `Hengne.Li@m.scnu.edu.cn`)
 
+> [!IMPORTANT]
+> ### 🌟 本项目核心成果：交互式全景网页与三维光子实验台（**强烈推荐必看！**）
+> **静态文档截图仅能呈现冰山一角——本研究最核心的物理发现、逆向重构内表面微米级凹凸形貌、Geant4 交叉验证对比以及三维光子多跳反射过程，全部浓缩在下方交互式网页中，强烈建议大家务必点开亲自操作体验！**
+>
+> * 🚀 **[点击直接打开：中文交互式核心成果门户网页（在线必看！）](https://hengne.github.io/picocal-lightguide-reconstruction/)** &nbsp;|&nbsp; 🌐 **[Open English Interactive Results Portal (Must-See!)](https://hengne.github.io/picocal-lightguide-reconstruction/index-en.html)**
+> * ✨ **[全屏打开：三维光子镜面反射与 PMT 读出实时实验台（中文）](https://hengne.github.io/picocal-lightguide-reconstruction/presentation/interactive-3d-photon-simulator.html)** &nbsp;|&nbsp; **[Fullscreen 3D Photon→PMT Workbench (EN)](https://hengne.github.io/picocal-lightguide-reconstruction/presentation/interactive-3d-photon-simulator-en.html)**
+> * 🔍 **[打开主交付物：0.6×–24× 无级缩放交互式矢量主报告 SVG（中文）](https://hengne.github.io/picocal-lightguide-reconstruction/light-guide-imperfection-simulation.svg)** &nbsp;|&nbsp; **[24× Zoomable Primary SVG Report (EN)](https://hengne.github.io/picocal-lightguide-reconstruction/light-guide-imperfection-simulation-en.svg)**
+>
+> **打开交互式网页您可以直接体验：**
+> 1. **100×100 实测 vs 模拟同步十字准星检视台**：鼠标悬停任意入射点，实时联动对比实验电压、Metal GPU 模拟电压、非轴对称局部凹凸百分比，以及叠加了**绿色 Geant4 11.1.3 独立验证误差棒**的横截面波形；
+> 2. **微米级内表面形貌探针**：在展开柱面图上逐点检视 `-268 μm ~ +272 μm` 的加工/贴膜鼓包空间分布 `ΔR(θ, z)`；
+> 3. **三维光子传播与 PMT 阳极波形实时模拟**：`360°` 拖拽旋转三维光导、点击任意二维坐标发射漫散射光束、一键切换理想圆锥与重构变形表面，直观看到微米级鼓包如何诱发临界光子折返逃逸！
+> *（注：CERN GitLab 或离线环境下可直接双击打开仓库内的 [`index.html`](./index.html) / [`index-en.html`](./index-en.html)，或直接转发零依赖单文件离线便携包 [`lhcb-picocal-light-guide-report-standalone-zh.html`](./lhcb-picocal-light-guide-report-standalone-zh.html) / [`-en.html`](./lhcb-picocal-light-guide-report-standalone-en.html)。）*
+
 ---
 
 ![LHCb PicoCal 锥形光导研究总结展板](./docs/figures/research-summary-poster.png)
@@ -49,8 +63,16 @@
 | **逆向拟合** | **全孔径二维皮尔逊相关系数** | **`r = 0.9931`** | 覆盖 `r < 8.40 mm` 完整有效通光孔径 |
 | **逆向拟合** | **非轴对称凹凸纹理相关系数** | **`r = 0.8797`**（未平滑单像素 `r = 0.8036`） | 像素级复现左上暗坑（`-5.5%`）与右侧新月高带（`+4.5%`） |
 | **逆向拟合** | **重构非轴对称形变峰值范围** | **`-268 μm`（向内鼓包）至 `+272 μm`（向外凹陷）** | 符合精密机械加工与手工贴附高反膜真实公差量级 |
-| **独立核验** | **Geant4 11.1 截面光学验证** | **平均净读出 `25.21 mV`**（`15` 点 × `8,000` 光子/点） | 沿 `Y' = +1.6 mm` 穿过核心凹坑特征区独立核验吻合 |
+| **独立核验** | **Geant4 11.1.3 交叉验证** | **均值 `25.21 mV`（与光追 `97.6%` / 与实验 `98.0%` 一致）** | 零参数重调（`15` 点 × `8,000` `G4OpticalPhoton`，`χ²/ndf = 1.82–1.89`） |
 | **内存安全** | **全流程物理内存峰值 (`RSS`)** | **`< 390 MB`**（反演 `335 MB` / 全流程 `386 MB`） | 由 [`memory-guard.py`](./memory-guard.py) 实时水位感知与硬上限保护 |
+
+### 2.1 Geant4 11.1.3 独立粒子级交叉验证结论（`Y' = +1.60 mm` 核心截面）
+
+在**零自由参数重调**的前提下，直接将自研求解器反演得到的双三次样条曲面网格（`56,576` 个水密三角面片 `G4TessellatedSolid`）、反射率、余弦指数与 PMT 增益标度原封不动传入 **Geant4 11.1.3 (`G4OpticalPhysics`)**，5 个并行进程仅耗时约 `11.2 秒` 完成 `15` 个采样点共 `120,000` 颗光学光子的独立核验：
+
+* **绝对信号幅值高度一致**：实验激光扫描截面均值 **`25.72 mV`**，自研 Metal / C++ 连续 B 样条光追均值 **`25.84 mV`**，Geant4 11.1.3 独立追踪均值 **`25.21 mV`**（单点统计误差 `±0.68 mV`）——**与自研光追绝对一致性达 `97.6%`（平均偏差 `-0.63 mV` / `-2.43%`，`RMSE = 0.94 mV`），与实验实测绝对一致性达 `98.0%`（平均偏差 `-0.51 mV` / `-1.97%`，`RMSE = 0.92 mV`）**。
+* **截面波形与统计拉偏自洽**：仅计纯统计涨落的约化卡方为 **`χ²/ndf = 1.89`**（vs 自研光追）和 **`1.82`**（vs 实验实测），15 个点中 11 个点落在 `1.7σ` 以内，最大单点偏离 `2.54σ`，完整复现了两侧偏高、中心偏凹、边缘滚降的“双峰夹一谷”空间形态。
+* **约 `-2.4%`（`-0.63 mV`）微小偏移的透明物理来源**：（1）[`geant4-light-guide.cc`](./geant4-validator/geant4-light-guide.cc) 为避免 Geant4 体素重叠报警，将敏感圆盘 `PmtWindowPV` 前端面置于 `z = 100.05 mm`（较 [`ray-tracer.py`](./ray-tracer.py) 的 `z = 100.00 mm` 出口面留有 **`50 μm` 空气间隙**），大掠射角贴边出射光子穿过该间隙时极少部分侧漏出 `R = 8.18 mm` 窗口（贡献约 `-1.5% ~ -2.0%`）；（2）`60 × 61` 平面三角面片（每 `6°` 一折）经 `4–8` 次反射产生的微小法向折角焦散起伏（`±1%`）；（3）Geant4 理想点光源与实验有限高斯光斑（`σ_beam = 0.219 mm`）的微小平滑差异。
 
 ![锥形光导光子镜面反射传输与临界角折返逃逸物理机制](./docs/figures/photon-propagation-mechanism.png)
 

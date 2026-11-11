@@ -89,6 +89,17 @@ SUMMARY_CSS: str = """
   .step-card h3 { font-size: 16.2px; font-weight: 700; margin-bottom: 8px; }
   .step-card p, .step-card li { color: #cbd5e1; font-size: 13.6px; }
   .step-card ul { padding-left: 18px; margin-top: 6px; display: flex; flex-direction: column; gap: 5px; }
+  .g4-callout { margin-top: 20px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.10), rgba(14, 165, 233, 0.08)), var(--bg-surface); border: 1px solid rgba(52, 211, 153, 0.48); border-radius: 16px; padding: 24px 26px; }
+  .g4-badge { display: inline-block; background: rgba(16, 185, 129, 0.18); color: var(--emerald); border: 1px solid rgba(52, 211, 153, 0.45); font-size: 11.8px; font-weight: 800; padding: 2px 10px; border-radius: 999px; letter-spacing: 0.4px; margin-bottom: 8px; }
+  .g4-callout h3 { font-size: 18px; font-weight: 800; color: #ecfdf5; margin-bottom: 8px; }
+  .g4-lead { color: #cbd5e1; font-size: 13.9px; margin-bottom: 16px; }
+  .g4-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 1024px) { .g4-grid { grid-template-columns: 1fr; } }
+  .g4-table-wrap { background: rgba(2, 6, 23, 0.72); border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; }
+  .g4-table-wrap th, .g4-table-wrap td { padding: 9px 12px; font-size: 12.9px; }
+  .g4-notes { background: rgba(2, 6, 23, 0.65); border: 1px solid #1e293b; border-radius: 12px; padding: 15px 18px; }
+  .g4-notes h4 { font-size: 14px; font-weight: 700; color: var(--emerald); margin-bottom: 8px; }
+  .g4-notes ul { padding-left: 18px; display: flex; flex-direction: column; gap: 7px; color: #cbd5e1; font-size: 13px; }
   .formula-box { background: #020617; border: 1px solid #1e293b; border-left: 3px solid var(--cyan); border-radius: 10px; padding: 11px 15px; margin: 11px 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.2px; color: #e2e8f0; overflow-x: auto; }
   .svg-frame { width: 100%; border-radius: 14px; border: 1px solid var(--border-subtle); background: #020617; overflow: hidden; margin-top: 16px; }
   .svg-frame object, .svg-frame svg { width: 100%; display: block; }
@@ -121,7 +132,7 @@ EXPLORER_JS_TEMPLATE: str = """(function() {
   "use strict";
   const D = __JSON_PAYLOAD__;
   const UI = D.ui;
-  let showBumpMode = false, selIx = 46, selIy = 64;
+  let showBumpMode = false, selIx = 46, selIy = 59;
   const cvMeas = document.getElementById("cvMeas"), cvSim = document.getElementById("cvSim");
   const cvSurf = document.getElementById("surfExplorerCanvas"), cvSlice = document.getElementById("sliceExplorerCanvas");
 
@@ -264,7 +275,7 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
             "fontStack": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
             "title": "LHCb PicoCal Conical Light-Guide Optical Simulation & Inverse Surface Reconstruction (Agy_Carbon)",
             "brandTitle": "LHCb PicoCal Light-Guide Simulation & Inverse Reconstruction",
-            "nav1": "1. Physics & Mechanism", "nav2": "2. Inverse Methodology", "nav3": "3. Interactive Explorer",
+            "nav1": "1. Physics & Mechanism", "nav2": "2. Solver & Geant4 Validation", "nav3": "3. Interactive Explorer",
             "nav4": "4. 3D Photon→PMT Bench", "nav5": "5. Deliverables & Docs",
             "toggleHref": "./index.html", "toggleText": "🌐 简体中文版",
             "eyebrow": "LHCb Upgrade II · PicoCal Optical Readout Uniformity & Inverse Problem Study",
@@ -273,8 +284,8 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
             "lead": (
                 f"To explain and quantitatively reproduce the non-uniform 2D light-yield ripples observed across a 4-cell conical light guide "
                 f"(<code>Ø17.5 mm</code> entrance → <code>Ø8.0 mm</code> exit, <code>100 mm</code> length), we formulated a <strong>576-DOF periodic bicubic B-spline "
-                f"freeform surface model</strong> coupled with <strong>native Apple Metal GPU ray tracing</strong> and <strong>Geant4 11.1.3 optical validation</strong>, "
-                f"recovering <code>{m['peakBulge']:.0f} μm to +{m['peakDent']:.0f} μm</code> machining/film bulges with pixel-level fidelity."
+                f"freeform surface model</strong> coupled with <strong>native Apple Metal GPU ray tracing</strong> and <strong>zero-free-parameter Geant4 11.1.3 optical validation "
+                f"(97.6%–98.0% absolute scale agreement)</strong>, recovering <code>{m['peakBulge']:.0f} μm to +{m['peakDent']:.0f} μm</code> machining/film bulges with pixel-level fidelity."
             ),
             "mainSvgHref": "./light-guide-imperfection-simulation-en.svg", "ctaMain": "🔍 Open Zoomable Interactive SVG Report (EN)",
             "sim3dHref": "./presentation/interactive-3d-photon-simulator-en.html", "cta3d": "✨ Launch Fullscreen 3D Photon & PMT Bench",
@@ -285,8 +296,8 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
             "k2L": "100×100 Full-Map Pearson r", "k2N": "32,768 scrambled QMC rays per scan point",
             "k3L": "Non-Axisymmetric Texture r", "k3N": "Reproduces upper-left pit & right bright crescent",
             "k4L": "Reconstructed Bulge / Dent", "k4N": f"Effective aperture R_eff = {m['effRadius']:.3f} mm (~311 μm film)",
-            "k5L": "End-to-End Pipeline Runtime", "k5V": "21.9 s", "k5N": "Metal GPU ~300M rays/s + 5×Geant4 workers",
-            "k6L": "Peak Resident Memory (RSS)", "k6N": "Adaptive MemoryGuard watchdog protection",
+            "k5L": "Geant4 11.1.3 Agreement", "k5V": "98.0%", "k5N": "25.21 mV vs 25.72 mV exp. (zero re-tuning)",
+            "k6L": "Runtime & Peak RAM (RSS)", "k6N": "22.6 s end-to-end (Metal GPU + 5×Geant4)",
             "s1Title": "Physical Diagnosis: Why Micron-Scale Wall Bulges Create Strong 2D Scan Ripples",
             "s1Sub": "Quantitative diagnosis combining STEP CAD geometry and 10,000-point diffuse laser scan measurements",
             "c1Head": "1. Experimental Geometry & Sub-Pixel Calibration",
@@ -315,9 +326,29 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
             "m3L2": "<strong>Stage 2</strong>: Exploit rotational symmetry—perturb only <code>16</code> axial basis modes to assemble the full <code>576</code>-DOF Jacobian in ~3 s;",
             "m3L3": "<strong>Stage 3</strong>: Laplacian curvature regularization + exact GPU backtracking line search.",
             "m4H": "Geant4 11.1.3 Cross-Check", "m4P": "Independent optical Monte Carlo verification via local <code>envs/g4</code>:",
-            "m4L1": "Export watertight <code>G4TessellatedSolid</code> with <code>polished dielectric_metal</code> reflector;",
-            "m4L2": "5 parallel workers shooting <code>120,000</code> <code>G4OpticalPhoton</code> tracks per slice point;",
+            "m4L1": "Export watertight <code>G4TessellatedSolid</code> (56,576 facets) with <code>polished dielectric_metal</code> mirror;",
+            "m4L2": "5 parallel workers shooting <code>120,000</code> <code>G4OpticalPhoton</code> tracks (~11 s runtime, 97.6%–98.0% match);",
             "m4L3": f"<code>MemoryGuard</code> enforces hard RSS ceiling (peak only <code>{m['peakRss']:.1f} MB</code>).",
+            "g4Badge": "INDEPENDENT PARTICLE-PHYSICS CROSS-VALIDATION · ZERO RE-TUNED PARAMETERS",
+            "g4Title": "✅ Geant4 11.1.3 Independent Cross-Validation Conclusion: 97.6%–98.0% Absolute Agreement",
+            "g4Lead": (
+                "Passing the reconstructed B-spline surface mesh, mirror reflectivity, cosine angular exponent, and PMT voltage gain directly into "
+                "<strong>Geant4 11.1.3</strong> (<code>G4OpticalPhysics</code> + <code>G4TessellatedSolid</code>) with <strong>zero parameter re-tuning</strong> confirms both the absolute "
+                "light-collection scale and the transverse 'double-peak flanking a central-left dip' spatial waveform along <code>Y' = +1.60 mm</code> (15 points × 8,000 photons = 120,000 optical photons)."
+            ),
+            "g4Th1": "Cross-Section Metric (Y' = +1.60 mm)", "g4Th2": "Quantitative Value", "g4Th3": "Statistical & Physical Assessment",
+            "g4Rows": [
+                ("Experimental Laser Scan Mean", "25.72 mV", "Bilinearly interpolated benchmark from scan_summary.csv"),
+                ("Metal / C++ Smooth B-Spline Raytracer", "25.84 mV", "Analytic C² surface normals (slice correlation r = 0.966)"),
+                ("Geant4 11.1.3 G4OpticalPhoton Mean", "25.21 mV (±0.68 mV/pt)", "5 parallel workers, 120,000 photons (~11.2 s runtime)"),
+                ("Geant4 vs. Metal/C++ Mean Bias", "-0.63 mV (-2.43%)", "97.6% absolute collection agreement (RMSE = 0.94 mV)"),
+                ("Geant4 vs. Experiment Mean Bias", "-0.51 mV (-1.97%)", "98.0% absolute experimental agreement (RMSE = 0.92 mV)"),
+                ("Reduced Chi-Square (χ²/ndf, stat. only)", "1.89 (vs Sim) / 1.82 (vs Exp)", "11/15 points within 1.7σ; max single-point pull 2.54σ"),
+            ],
+            "g4NotesTitle": "Physical Origin of the ~2.4% (-0.63 mV) Offset:",
+            "g4N1": "<strong>50 μm PMT Overlap-Safety Air Gap (~-1.5% to -2.0%)</strong>: <code>ray-tracer.py</code> scores photons directly at <code>z = 100.00 mm</code>, whereas <code>geant4-light-guide.cc</code> places <code>PmtWindowPV</code> front face at <code>z = 100.05 mm</code> to prevent volume-overlap warnings, letting grazing high-angle exit rays slip outside <code>R = 8.18 mm</code>.",
+            "g4N2": "<strong>Planar Facets vs. Smooth C² Spline (~±1% jitter)</strong>: The fast 11 s Geant4 check uses a <code>60(θ) × 61(z)</code> planar facet mesh (6° steps); over 4–8 bounces, facet-normal jumps add ~0.3–0.5 mV caustic jitter, nudging pure-stat χ²/ndf from 1.0 to 1.89.",
+            "g4N3": "<strong>Point Source vs. Finite Laser Spot</strong>: Geant4 shoots an ideal point source while experiment & primary simulation convolve the <code>σ_beam = 0.219 mm</code> spot. <em>(Green Geant4 points are live-overlaid in Section 03 below!)</em>",
             "s3Title": "Interactive Explorer: Reconstructed Surface Map ↔ 2D Scan Response",
             "s3Sub": "Hover or move across either heatmap to inspect measured mV, simulated mV, non-axisymmetric ripples, and slice profiles",
             "exLeftTitle": "Entrance 100×100 Synchronized Scan Comparison (Hover to Probe)",
@@ -360,7 +391,7 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
         "fontStack": '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
         "title": "LHCb PicoCal 锥形光导光学模拟与内表面逆向重构 — 工作总结报告 (Agy_Carbon)",
         "brandTitle": "LHCb PicoCal 锥形光导模拟与逆向重构工作总结",
-        "nav1": "1. 物理背景与机制", "nav2": "2. 建模与求解思路", "nav3": "3. 实测 vs 模拟检视",
+        "nav1": "1. 物理背景与机制", "nav2": "2. 建模与 Geant4 验证", "nav3": "3. 实测 vs 模拟检视",
         "nav4": "4. 三维光子→PMT 实验台", "nav5": "5. 交付文件与手册",
         "toggleHref": "./index-en.html", "toggleText": "🌐 English Version",
         "eyebrow": "LHCb Upgrade II · PicoCal 光学读出均匀性逆问题研究",
@@ -369,7 +400,7 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
         "lead": (
             f"针对四通道圆锥形光导（入射口 <code>Ø17.5 mm</code> → 出射口 <code>Ø8.0 mm</code>，长 <code>100 mm</code>）在漫反射激光二维扫描中呈现出的光产额凹凸起伏，"
             f"我们构建了<strong>周期双三次 B 样条自由曲面模型（576 控制自由度）</strong>，结合 <strong>Apple M3 Max 原生 Metal GPU 硬件光线追踪</strong> 与本机 "
-            f"<strong>Geant4 11.1.3 独立光学光子验证</strong>，成功反演出内壁 <code>{m['peakBulge']:.0f} μm ~ +{m['peakDent']:.0f} μm</code> 量级的真实加工/贴膜鼓包分布，像素级复现了实测二维光响应图。"
+            f"<strong>Geant4 11.1.3 零自由参数独立光学光子验证（绝对幅值一致性达 97.6%–98.0%）</strong>，成功反演出内壁 <code>{m['peakBulge']:.0f} μm ~ +{m['peakDent']:.0f} μm</code> 量级的真实加工/贴膜鼓包分布，像素级复现了实测二维光响应图。"
         ),
         "mainSvgHref": "./light-guide-imperfection-simulation.svg", "ctaMain": "🔍 打开主交付物：可无级缩放交互式 SVG 报告",
         "sim3dHref": "./presentation/interactive-3d-photon-simulator.html", "cta3d": "✨ 全屏打开三维光子传播与 PMT 接收实验台",
@@ -380,8 +411,8 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
         "k2L": "100×100 全图皮尔逊相关系数", "k2N": "每像素发射 32,768 条准蒙特卡洛光线",
         "k3L": "非轴对称凹凸结构相关系数", "k3N": "精准复现左上凹坑与右侧新月高产额带",
         "k4L": "反演内表面局部凹凸幅度", "k4N": f"有效通光孔径 R_eff = {m['effRadius']:.3f} mm (膜厚 ~311 μm)",
-        "k5L": "异构加速端到端总耗时", "k5V": "21.9 秒", "k5N": "Metal GPU ~3亿光线/秒 + 5×Geant4 并行",
-        "k6L": "全程峰值物理内存 (RSS)", "k6N": "内置自适应水位感知与硬性内存看门狗",
+        "k5L": "Geant4 独立交叉验证一致性", "k5V": "98.0%", "k5N": "25.21 mV vs 实测 25.72 mV (零参数重调)",
+        "k6L": "全流程耗时与内存峰值", "k6N": "端到端 22.6 秒 (Metal GPU + 5×Geant4)",
         "s1Title": "物理问题剖析：为什么微米级内壁凸起会导致明显的二维读数凹凸？",
         "s1Sub": "结合 STEP 三维切片模型与 10,000 点激光漫反射扫描数据的定量物理诊断",
         "c1Head": "1. 实验几何与亚像素标定发现",
@@ -410,9 +441,28 @@ def getPortalCopy(lang: str, m: dict[str, float]) -> dict[str, Any]:
         "m3L2": "<strong>阶段 2</strong>：利用旋转对称性仅对 <code>16</code> 个轴向基函数微扰映射，3 秒构建 <code>576</code> 维灵敏度矩阵；",
         "m3L3": "<strong>阶段 3</strong>：结合二阶拉普拉斯曲率正则化与 GPU 非线性回溯线搜索单调收敛。",
         "m4H": "Geant4 11.1.3 并行核验与护栏", "m4P": "调用本机 <code>miniconda3/envs/g4</code> 环境完成独立粒子级交叉验证与系统保护：",
-        "m4L1": "将反演变形面导出为水密封闭 <code>G4TessellatedSolid</code>，配置金属高反膜光学表面；",
-        "m4L2": "5 进程并行发射 <code>120,000</code> 颗 <code>G4OpticalPhoton</code> 统计末端 PMT 命中率；",
+        "m4L1": "将反演变形面导出为水密封闭 <code>G4TessellatedSolid</code>（56,576 面片），配置金属高反膜光学表面；",
+        "m4L2": "5 进程并行发射 <code>120,000</code> 颗 <code>G4OpticalPhoton</code>（约 11 秒跑完，幅值一致性达 97.6%–98.0%）；",
         "m4L3": f"<code>MemoryGuard</code> 实时看护进程 RSS（全程峰值仅 <code>{m['peakRss']:.1f} MB</code>）。",
+        "g4Badge": "INDEPENDENT CROSS-VALIDATION · Geant4 11.1.3 零自由参数独立交叉验证结论",
+        "g4Title": "✅ Geant4 11.1.3 独立粒子级交叉验证结论：绝对光收集效率一致性达 97.6%–98.0%",
+        "g4Lead": (
+            "在<strong>零自由参数重调</strong>的前提下，将自研求解器反演得到的双三次样条曲面网格、高反膜反射率、余弦角分布指数与 PMT 增益标度原封不动传入 "
+            "<strong>Geant4 11.1.3</strong>（<code>G4OpticalPhysics</code> + <code>G4TessellatedSolid</code>），沿穿过核心暗坑的 <code>Y' = +1.60 mm</code> 截面（15 个采样点 × 每点 8,000 光子 = 共 120,000 个光学光子）完成独立追踪：绝对信号幅值与<strong>「两侧偏高、中心偏凹、边缘滚降」的双峰夹一谷空间形态</strong>与实验及自研光追完全同相吻合。"
+        ),
+        "g4Th1": "截面定量对比指标 (Y' = +1.60 mm)", "g4Th2": "定量结果", "g4Th3": "物理与统计一致性评价",
+        "g4Rows": [
+            ("实验激光扫描实测截面均值", "25.72 mV", "scan_summary.csv 实测双线性插值基准"),
+            ("自研 Metal / C++ 连续 B 样条光追均值", "25.84 mV", "解析 C² 法向量精确求交（与实验截面 r = 0.966）"),
+            ("Geant4 11.1.3 独立光学追踪均值", "25.21 mV (±0.68 mV/点)", "5 进程并行追踪 120,000 光子（耗时约 11.2 秒）"),
+            ("Geant4 vs 自研光追平均偏差", "-0.63 mV (-2.43%)", "绝对光收集效率一致性达 97.6%（RMSE = 0.94 mV）"),
+            ("Geant4 vs 实验实测平均偏差", "-0.51 mV (-1.97%)", "与实验绝对幅值一致性达 98.0%（RMSE = 0.92 mV）"),
+            ("约化卡方 χ²/ndf（仅计纯统计涨落）", "1.89 (vs 光追) / 1.82 (vs 实验)", "15 点中 11 点落在 1.7σ 内，最大单点偏离 2.54σ，无异常离群点"),
+        ],
+        "g4NotesTitle": "约 -2.4%（-0.63 mV）微小系统偏移的三项透明物理来源：",
+        "g4N1": "<strong>PMT 读出窗口 50 μm 防重叠空气间隙（主因，约 -1.5% ~ -2.0%）</strong>：<code>ray-tracer.py</code> 在 <code>z = 100.00 mm</code> 出口面直接计数；<code>geant4-light-guide.cc</code> 为防止 Geant4 体素重叠报警将 <code>PmtWindowPV</code> 前端面置于 <code>z = 100.05 mm</code>，大掠射角贴边出射光子穿过该 50 μm 间隙时有极少部分从侧面滑出 <code>R = 8.18 mm</code> 窗口。",
+        "g4N2": "<strong>离散平面三角面片 vs 连续 C² 样条（局部 ±1% 焦散微抖动）</strong>：11 秒快速验证采用 <code>60(θ) × 61(z)</code> 平面面片（每 6° 一折），经 4～8 次反射后微小法向折角引入 ±0.3~0.5 mV 起伏，使纯统计 χ²/ndf 从 1.0 轻微升至 1.89。",
+        "g4N3": "<strong>理想点光源 vs 有限激光光斑宽度</strong>：Geant4 发射零宽度点光源，而实验与主光追包含 <code>σ_beam = 0.219 mm</code> 高斯光斑平滑。<em>（下方 Section 03 截面图已默认展示绿色 Geant4 误差棒核验点！）</em>",
         "s3Title": "交互式结果检视台：重构内表面形貌 ↔ 二维扫描响应实时联动",
         "s3Sub": "在下方任意热力图上移动鼠标，即可同步对比实测读数、模拟读数、非轴对称凹凸纹理以及对应横截面曲线",
         "exLeftTitle": "入射窗口 100×100 二维扫描同步对比（移动光标实时联动）",
@@ -463,6 +513,10 @@ def renderSummaryHtmlDocument(baseWebData: dict[str, Any], m: dict[str, float], 
     rowsHtml = "\n".join(
         f'<tr><td><a href="{href}" target="_blank"><code>{href[2:]}</code></a></td><td><strong style="color:var(--cyan);">{cat}</strong></td><td>{desc}</td></tr>'
         for href, cat, desc in c["rows"]
+    )
+    g4RowsHtml = "\n".join(
+        f'<tr><td>{dim}</td><td><strong style="color:var(--emerald);">{val}</strong></td><td>{note}</td></tr>'
+        for dim, val, note in c["g4Rows"]
     )
     return f"""<!DOCTYPE html>
 <html lang="{c['htmlLang']}">
@@ -525,6 +579,27 @@ def renderSummaryHtmlDocument(baseWebData: dict[str, Any], m: dict[str, float], 
       <div class="step-card"><div class="step-badge">02</div><h3>{c['m2H']}</h3><p>{c['m2P']}</p><ul><li>{c['m2L1']}</li><li>{c['m2L2']}</li><li>{c['m2L3']}</li></ul></div>
       <div class="step-card"><div class="step-badge">03</div><h3>{c['m3H']}</h3><p>{c['m3P']}</p><ul><li>{c['m3L1']}</li><li>{c['m3L2']}</li><li>{c['m3L3']}</li></ul></div>
       <div class="step-card"><div class="step-badge">04</div><h3>{c['m4H']}</h3><p>{c['m4P']}</p><ul><li>{c['m4L1']}</li><li>{c['m4L2']}</li><li>{c['m4L3']}</li></ul></div>
+    </div>
+    <div id="sec-g4-validation" class="g4-callout">
+      <span class="g4-badge">{c['g4Badge']}</span>
+      <h3>{c['g4Title']}</h3>
+      <p class="g4-lead">{c['g4Lead']}</p>
+      <div class="g4-grid">
+        <div class="g4-table-wrap">
+          <table>
+            <thead><tr><th>{c['g4Th1']}</th><th>{c['g4Th2']}</th><th>{c['g4Th3']}</th></tr></thead>
+            <tbody>{g4RowsHtml}</tbody>
+          </table>
+        </div>
+        <div class="g4-notes">
+          <h4>{c['g4NotesTitle']}</h4>
+          <ul>
+            <li>{c['g4N1']}</li>
+            <li>{c['g4N2']}</li>
+            <li>{c['g4N3']}</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
   <section id="sec-explorer">
