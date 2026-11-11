@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software, optical ray-tracing framework, or reconstructed light-guide geometry in your research, please cite it using the metadata below."
+type: software
+title: "LHCb PicoCal Conical Light-Guide Optical Simulation & Inverse Surface Reconstruction Toolkit"
+authors:
+  - family-names: "Li"
+    given-names: "Hengne"
+    email: "Hengne.Li@cern.ch"
+    affiliation: "South China Normal University (SCNU) & LHCb Collaboration, CERN"
+contact:
+  - family-names: "Li"
+    given-names: "Hengne"
+    email: "Hengne.Li@cern.ch"
+    affiliation: "South China Normal University (SCNU) & LHCb Collaboration, CERN"
+version: "1.0.0"
+date-released: "2026-11-11"
+license: "MIT"
+keywords:
+  - "LHCb"
+  - "PicoCal"
+  - "Light Guide"
+  - "Ray Tracing"
+  - "Inverse Problem"
+  - "Geant4"
+  - "Metal GPU"
+abstract: >-
+  Cross-platform 3D freeform specular ray-tracing simulation, periodic bicubic
+  B-spline nonlinear inverse surface reconstruction, Geant4 optical-photon
+  cross-validation, and interactive 3D/SVG/HTML5 visualization suite for
+  diagnosing micron-scale inner-wall deformations in LHCb Upgrade II PicoCal
+  conical light guides from 2D laser uniformity bench scans.

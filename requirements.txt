@@ -1,0 +1,16 @@
+# LHCb PicoCal Conical Light-Guide Optical Simulation & Inverse Reconstruction Toolkit
+# Author: Hengne Li <Hengne.Li@cern.ch>, <Hengne.Li@m.scnu.edu.cn>
+#
+# Cross-platform Python dependencies (Linux / macOS / Windows, Python >= 3.10).
+# Install via:
+#   pip install -r requirements.txt
+
+numpy>=1.24
+scipy>=1.10
+pandas>=2.0
+torch>=2.0
+
+# Optional dependency: required only if rebuilding the bilingual PDF user manuals
+# (docs/user-manual-en.pdf and docs/user-manual-zh.pdf) via build-user-manuals.py.
+# Pre-built PDF manuals are already included in docs/.
+# weasyprint>=60.0

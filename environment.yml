@@ -1,0 +1,26 @@
+# LHCb PicoCal Conical Light-Guide Optical Simulation & Inverse Reconstruction Toolkit
+# Author: Hengne Li <Hengne.Li@cern.ch>, <Hengne.Li@m.scnu.edu.cn>
+#
+# Cross-platform Conda / Mamba environment specification (Linux / macOS / Windows).
+# Create and activate via:
+#   conda env create -f environment.yml
+#   conda activate picocal-lightguide
+
+name: picocal-lightguide
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - numpy
+  - scipy
+  - pandas
+  - pytorch
+  - cxx-compiler
+
+  # Optional: uncomment on Linux (x86_64 / aarch64) or macOS (arm64 / x86_64) to enable
+  # independent Geant4 >= 11.1 optical-photon Monte Carlo cross-validation:
+  # - geant4>=11.1
+
+  # Optional: uncomment to rebuild the bilingual A4 PDF user manuals (docs/user-manual-*.pdf)
+  # from source via build-user-manuals.py:
+  # - weasyprint>=60.0

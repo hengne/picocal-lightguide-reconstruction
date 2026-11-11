@@ -1,0 +1,44 @@
+# LHCb PicoCal Conical Light-Guide Simulation & Reconstruction Repository
+# Author: Hengne Li <Hengne.Li@cern.ch>, <Hengne.Li@m.scnu.edu.cn>
+
+# Python bytecode & local virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Compiled native C++17 / Metal shared libraries & object files
+*.o
+*.obj
+*.dylib
+*.so
+*.dll
+
+# Compiled Geant4 validator executable
+geant4-validator/geant4-light-guide-bin
+geant4-validator/geant4-light-guide-bin.exe
+
+# Explicitly preserve committed scientific datasets, meshes, reports, portals & manuals
+!data/
+!data/**
+!outputs/*.csv
+!outputs/*.json
+!outputs/*.stl
+!outputs/geant4-surface-grid.txt
+!outputs/geant4-slice-points.txt
+!docs/*.pdf
+!docs/figures/*.png
+!presentation/*
+!*.svg
+!*.html
+
+# Transient Geant4 worker shard files & runtime logs (must stay ignored after !outputs/*.csv)
+outputs/geant4-pts-shard-*.txt
+outputs/geant4-out-shard-*.csv
+outputs/*.log
+
+# OS & editor metadata
+.DS_Store
+.vscode/
+.idea/

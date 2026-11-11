@@ -1,0 +1,13 @@
+{
+  "innerRmseMv": 0.3139593303203583,
+  "innerRmsePct": 1.236465661161836,
+  "noiseFloorPct": 0.8063933913958999,
+  "totalCorr": 0.9931103079531693,
+  "nonAxiCorr": 0.8797335141220236,
+  "nonAxiCorrRaw": 0.803577581538248,
+  "beamSigmaMm": 0.2186363820641219,
+  "effectiveRadiusMm": 8.43783045668871,
+  "peakBulgeUm": -268.4544982910156,
+  "peakDentUm": 271.7597961425781,
+  "peakRssMb": 334.890625
+}
